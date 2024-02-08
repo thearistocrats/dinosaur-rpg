@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://4i6gbm8tt2ar"]
+
+[ext_resource type="Script" path="res://health_bar.gd" id="1_r1wsu"]
+[ext_resource type="Texture2D" uid="uid://bom0uedtjod3e" path="res://Assets/health bar/health bar_empty.png" id="2_5eg8f"]
+[ext_resource type="Texture2D" uid="uid://o6bpu8r48l4x" path="res://Assets/health bar/health bar_bar.png" id="3_f11tj"]
+[ext_resource type="FontFile" uid="uid://kntrq14ul6j" path="res://Assets/fonts/Xolonium-Regular.ttf" id="4_hyv3n"]
+
+[node name="Health_Bar" type="Node2D"]
+script = ExtResource("1_r1wsu")
+
+[node name="Health_Bar_Texture" type="TextureProgressBar" parent="."]
+offset_right = 1044.0
+offset_bottom = 216.0
+texture_over = ExtResource("2_5eg8f")
+texture_progress = ExtResource("3_f11tj")
+texture_progress_offset = Vector2(168, 24)
+
+[node name="Health_Numbers" type="Label" parent="."]
+offset_left = 216.0
+offset_top = 48.0
+offset_right = 1020.0
+offset_bottom = 154.0
+theme_override_fonts/font = ExtResource("4_hyv3n")
+theme_override_font_sizes/font_size = 84
