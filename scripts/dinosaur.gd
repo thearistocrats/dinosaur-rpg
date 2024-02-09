@@ -36,26 +36,29 @@ enum Conditions{
 	NONE
 }
 
+#this class is used to track all stats for the dinosaur and provide useful functions
+#wip, state tracking for deaths or conditions
 class Dinosaur:
-	var dino_name: String
-	var dino_type: DinosaurTypes
+	var dino_name = "NO NAME"
+	var dino_type = DinosaurTypes.NOTYPE
 	
-	var max_health: float
-	var starting_health: float
-	var min_health: float
+	var max_health = 100.0
+	var starting_health = 100.0
+	var min_health = 0.0
 	
-	var armour_flat: float
-	var armour_percent: float
+	var armour_flat = 0.0
+	var armour_percent = 0.0
 	
-	var attack_damage: float
-	var damage_multiplier: float
+	var attack_damage = 35.0
+	var damage_multiplier = 0.0
 	
-	var healing_amount: float
-	var over_healing_amount: float
+	var healing_amount = 15.0
+	var over_healing_amount = 5.0
 	
 	var current_health: float
 	var is_alive: bool
 	
+#provided are some default values, all of which will be overwritten by calling this class constructor
 	func _init(
 		dino_name: String, dino_type: DinosaurTypes,
 		max_health: float, starting_health: float, min_health: float,
@@ -81,3 +84,34 @@ class Dinosaur:
 		
 		self.current_health = starting_health
 		self.is_dead = false
+	
+	#call this function to damage the dinosaur
+	func damage_dinosaur(damage:float):
+		if self.current_health <= self.min_health:
+			pass
+		elif self.current_health - damage <= self.min_health:
+			self.current_health = self.min_health
+		else: self.current_health -= damage
+
+	#call this function to heal the dinosaur
+	func heal_dinosaur(heal_amount:float):
+		if self.current_health >= self.max_health:
+			pass
+		elif self.current_health + heal_amount >= self.max_health:
+			self.current_health = self.max_health
+		else: self.current_health += heal_amount
+
+	#call this function to over damage the dinosaur
+	func over_heal_dinosaur(heal_amount:float):
+		self.current_health += heal_amount
+		
+	#call this function to over heal the dinosaur
+	func over_damage_dinosaur(damage:float):
+		self.current_health -= damage
+
+	#call this function to fade over heal the dinosaur
+	func over_heal_fade(fade_amount:float):
+		if self.current_health - fade_amount >= self.max_health:
+			self.current_health -= fade_amount 
+		elif self.current_health >= self.max_health:
+			self.current_health = self.max_health
