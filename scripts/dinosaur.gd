@@ -2,7 +2,8 @@
 #no logic or tracking will be done here
 #maybe methods, but only for internal use
 
-enum DinosaurTypes{# i don't know enough about dinosaurs to fill this out, but add their species here
+# i don't know enough about dinosaurs to fill this out, but add their species here
+enum DinosaurTypes{
 	NOTYPE,
 	DEVIN,
 	KEVIN,
@@ -11,7 +12,8 @@ enum DinosaurTypes{# i don't know enough about dinosaurs to fill this out, but a
 	TYRANNOSAURUS_REX
 }
 
-enum DamageTypes{# these are just dnd5e dnmage types, replace with w/e
+# these are just dnd5e dnmage types, replace with w/e
+enum DamageTypes{
 	ACID,
 	BLUDGEONING,
 	COLD,
@@ -27,6 +29,7 @@ enum DamageTypes{# these are just dnd5e dnmage types, replace with w/e
 	THUNDER
 }
 
+#tbd if we even need these
 enum Spells{}
 enum Items{}
 enum Actions{
@@ -36,9 +39,18 @@ enum Conditions{
 	NONE
 }
 
+#this is used to track the state of the dinosaur, mostly for use to make sure methods based on state are only performed once
+#anything that changes frequently, or changes how the dinosaur behaves should be tracked here
+class State:
+	#currently only if the dinosaur is dead is tracked, but we can add more things to track
+	var is_dead: bool
+	#syncs the variables, this method makes it clearer
+	func sync_is_dead(is_dead: bool):
+		self.is_dead = is_dead
+
 #this class is used to track all stats for the dinosaur and provide useful functions
-#wip, state tracking for deaths or conditions
 class Dinosaur:
+	#either use @export to use the inspector to easily change variables or change it manually
 	var dino_name = "NO NAME"
 	var dino_type = DinosaurTypes.NOTYPE
 	
@@ -55,11 +67,16 @@ class Dinosaur:
 	var healing_amount = 15.0
 	var over_healing_amount = 5.0
 	
-	var current_health: float
-	var is_alive: bool
+	#these stats change often, unlike the stats above
+	var current_health = starting_health
+	var current_condition = Conditions.NONE
 	
-#provided are some default values, all of which will be overwritten by calling this class constructor
-	func _init(
+	#This is used to track the current state of the dinosaur, as well as its past state
+	var past_state = State.new()
+	var is_dead = false
+	
+#provided are some default values, all of which will be overwritten by calling this
+	func populate_stats(
 		dino_name: String, dino_type: DinosaurTypes,
 		max_health: float, starting_health: float, min_health: float,
 		armour_flat: float, armour_percent: float,
@@ -83,7 +100,9 @@ class Dinosaur:
 		self.over_healing_amount = over_healing_amount
 		
 		self.current_health = starting_health
-		self.is_dead = false
+		self.current_condition = Conditions.NONE
+		
+		self.past_state.sync_is_dead(self.is_dead)
 	
 	#call this function to damage the dinosaur
 	func damage_dinosaur(damage:float):
