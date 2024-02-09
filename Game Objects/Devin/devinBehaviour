@@ -1,0 +1,121 @@
+extends Area2D
+const dinosaur = preload("res://Scripts/dinosaur.gd")
+
+@export_category("Dino data")
+@export var _dinosaur_name: String
+@export var _dinosaur_type: dinosaur.DinosaurTypes
+
+@export_category("Health Numbers")
+@export var _max_health: float
+@export var _starting_health: float
+@export var _min_health: float
+
+@export_category("Armor Values")
+@export var _armour_flat: float
+@export var _armour_percent: float
+#the actual formuala for damage calculations can be changed, this just provides the levers for armour
+
+@export_category("Damage Values")
+@export var _attack_damage: float
+@export var _damage_multiplier: float
+
+@export_category("misc")
+@export var _healing_amount: float
+@export var _over_healing_amount: float
+#the variables above are just to make it easier to change in the editor, 
+#they will only be used to construct the dinosaur class, they are prefaced with _ because they are not to be used anywhere else
+#This is to make all tracked stats universal for all dinsaurs
+var devin = dinosaur.Dinosaur.new()
+
+#signals
+signal dinosaur_hit
+signal dinosaur_killed
+signal attempt_attack(damage:float, attack_type: dinosaur.DinosaurTypes)
+
+func _ready():
+	#from here, please only use the variables in the dinosaur class devin, to unify tracked stats accross all dinosaurs
+	devin.populate_stats(
+		_dinosaur_name, _dinosaur_type, 
+		_max_health, _starting_health, _min_health, 
+		_armour_flat, _armour_percent, 
+		_attack_damage, _damage_multiplier, 
+		_healing_amount, _over_healing_amount)
+		
+	$Health_Bar.set_health(devin.max_health, devin.current_health, devin.min_health)
+	$Devin_Sprite.play("default")
+
+func _process(delta):
+	update_current_state()
+	if is_state_changed():
+		
+		if devin.is_dead:
+			kill_dinosaur()
+		else:
+			revive_dinosaur()
+
+#use this to update any stats that wouldn't be updated elsewhere
+func update_current_state():
+	devin.is_dead = devin.current_health <= devin.min_health
+
+#this this to detect if there are any changes to the current state
+#once all past states are synced to the current this will return false
+func is_state_changed() -> bool:
+	return devin.past_state.is_dead != devin.is_dead
+	
+#caling this kills the dinosaur
+func kill_dinosaur():
+	devin.past_state.sync_is_dead(devin.is_dead)
+	dinosaur_killed.emit()
+	$Devin_Sprite.play("death_animation")
+	$Devin_Sprite.rotate(PI * -0.5)
+	print("ouch!")
+
+#calling this revives the dinosaur
+func revive_dinosaur():
+	devin.past_state.sync_is_dead(devin.is_dead)
+	$Devin_Sprite.play("default")
+	$Devin_Sprite.rotate(PI * 0.5)
+	print("we are so back")
+	
+	
+#these are leftovers from the button panel, which is only used for testing purposed rn and can be swaped out
+func _on_attack():
+	attack()
+func _on_self_damage():
+	dinosaur_hit.emit()
+	damage_dinosaur(devin.attack_damage)
+func _on_heal_self():
+	heal_dinosaur(devin.healing_amount)
+func _on_over_heal_self():
+	over_heal_dinosaur(devin.over_healing_amount)
+
+	
+	
+	
+#calling this attempts an attack
+#wip, being able to determin who to attack
+func attack():
+	var damage_type = dinosaur.DamageTypes.BLUDGEONING
+	attempt_attack.emit(devin.attack_damage, damage_type)
+	print("pew pew!, attacking with ", str(devin.attack_damage), " of type ", str(damage_type))
+
+#calling this damanges the dinosaur and updates the health bar
+func damage_dinosaur(damage:float):
+	devin.damage_dinosaur(damage)
+	$Health_Bar.update_current_health(devin.current_health)
+
+func heal_dinosaur(heal_amount:float):
+	devin.heal_dinosaur(heal_amount)
+	$Health_Bar.update_current_health(devin.current_health)
+
+func over_heal_dinosaur(heal_amount:float):
+	devin.over_heal_dinosaur(heal_amount)
+	$Health_Bar.update_current_health(devin.current_health)
+	
+func over_damage_dinosaur(damage:float):
+	devin.over_damage_dinosaur(damage)
+	$Health_Bar.update_current_health(devin.current_health)
+
+func over_heal_fade(fade_amount:float):
+	devin.over_heal_fade(fade_amount)
+	$Health_Bar.update_current_health(devin.current_health)
