@@ -28,6 +28,9 @@ enum DamageTypes{
 	SLASHING,
 	THUNDER
 }
+enum Conditions{
+	NONE
+}
 
 #tbd if we even need these
 enum Spells{}
@@ -35,28 +38,39 @@ enum Items{}
 enum Actions{
 	ATTACK
 }
-enum Conditions{
-	NONE
+
+#these mirror the stats tracked below
+enum TrackedStats{
+	DINO_NAME,
+	DINO_TYPE,
+	MAX_HEALTH,
+	STARTING_HEALTH,
+	MIN_HEALTH,
+	CURRENT_HEALTH,
+	ARMOUR_FLAT,
+	ARMOUR_PERCENT,
+	ATTACK_DAMAGE,
+	DAMAGE_MULTIPLIER,
+	HEALING_AMOUNT,
+	OVER_HEALING_AMOUNT,
+	CURRENT_CONDITION,
+	IS_DEAD,
+	IS_FLIPPED_H,
+	IS_FLIPPED_V,
+	ROTATION
 }
 
-#this is used to track the state of the dinosaur, mostly for use to make sure methods based on state are only performed once
-#anything that changes frequently, or changes how the dinosaur behaves should be tracked here
-class State:
-	#currently only if the dinosaur is dead is tracked, but we can add more things to track
-	var is_dead: bool
-	#syncs the variables, this method makes it clearer
-	func sync_is_dead(is_dead: bool):
-		self.is_dead = is_dead
-
-#this class is used to track all stats for the dinosaur and provide useful functions
 class Dinosaur:
 	#either use @export to use the inspector to easily change variables or change it manually
+	#provided are default values, do not change any values here as it will change the default for all dinosaurs, 
+	#which may also get overwritten
 	var dino_name = "NO NAME"
 	var dino_type = DinosaurTypes.NOTYPE
 	
 	var max_health = 100.0
 	var starting_health = 100.0
 	var min_health = 0.0
+	var current_health = starting_health
 	
 	var armour_flat = 0.0
 	var armour_percent = 0.0
@@ -67,15 +81,54 @@ class Dinosaur:
 	var healing_amount = 15.0
 	var over_healing_amount = 5.0
 	
-	#these stats change often, unlike the stats above
-	var current_health = starting_health
 	var current_condition = Conditions.NONE
 	
-	#This is used to track the current state of the dinosaur, as well as its past state
-	var past_state = State.new()
 	var is_dead = false
 	
-#provided are some default values, all of which will be overwritten by calling this
+	var is_flipped_h = false
+	var is_flipped_v = false
+	var rotation = 0.0
+	
+	#array for storing stats that are different for a current state and a past state
+	var stats_to_act_on = []
+	
+	#takes another instance of the same class and uses it to set some stats
+	func sync_all(other_class: Dinosaur):
+		sync_identity(other_class)
+		sync_health(other_class)
+		sync_armor(other_class)
+		sync_attack(other_class)
+		sync_healing(other_class)
+		sync_condition(other_class)
+		sync_is_dead(other_class)
+		sync_rotate_and_flip(other_class)
+	func sync_identity(other_class: Dinosaur):
+		self.dino_name = other_class.dino_name
+		self.dino_type = other_class.dino_type
+	func sync_health(other_class: Dinosaur):
+		self.max_health = other_class.max_health
+		self.starting_health = other_class.starting_health
+		self.min_health = other_class.min_health
+		self.current_health = other_class.current_health
+	func sync_armor(other_class: Dinosaur):
+		self.armour_flat = other_class.armour_percent
+		self.armour_percent = other_class.armour_percent
+	func sync_attack(other_class: Dinosaur):
+		self.attack_damage = other_class.attack_damage
+		self.damage_multiplier = other_class.damage_multiplier
+	func sync_healing(other_class: Dinosaur):
+		self.healing_amount = other_class.healing_amount
+		self.over_healing_amount = other_class.over_healing_amount
+	func sync_condition(other_class: Dinosaur):
+		self.current_condition = other_class.current_condition
+	func sync_is_dead(other_class: Dinosaur):
+		self.is_dead = other_class.is_dead
+	func sync_rotate_and_flip(other_class: Dinosaur):
+		self.rotation = other_class.rotation
+		self.is_flipped_h = other_class.is_flipped_h
+		self.is_flipped_v = other_class.is_flipped_v
+	
+#use this to set the base stats for your dinosaur
 	func populate_stats(
 		dino_name: String, dino_type: DinosaurTypes,
 		max_health: float, starting_health: float, min_health: float,
@@ -101,8 +154,13 @@ class Dinosaur:
 		
 		self.current_health = starting_health
 		self.current_condition = Conditions.NONE
-		
-		self.past_state.sync_is_dead(self.is_dead)
+	
+	#these functions below are used to provide internal logic for the stats
+	#these functions will be universal for all dinosaurs
+	
+	func calc_damage(incoming_damage:float) -> float:
+		return (incoming_damage * (1.0 - self.armour_percent)) - self.armour_flat
+		#return (incoming_damage - self.armour_flat) * (1.0 - self.armour_percent)
 	
 	#call this function to damage the dinosaur
 	func damage_dinosaur(damage:float):
