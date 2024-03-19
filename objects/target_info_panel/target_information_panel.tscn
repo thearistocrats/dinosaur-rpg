@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuaw3ddtw11f1"]
+
+[ext_resource type="Script" path="res://objects/target_info_panel/target_information_panel.gd" id="1_tvvcd"]
+
+[node name="Target Information Panel" type="Node2D"]
+script = ExtResource("1_tvvcd")
+
+[node name="Health" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Name" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Stamina" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
