@@ -1,0 +1,56 @@
+const dinosaur_script = preload("res://Scripts/dinosaur.gd")
+
+enum DamageTypes{
+	ACID,
+	BLUDGEONING,
+	COLD,
+	FIRE,
+	FORCE,
+	LIGHTNING,
+	NECROTIC,
+	PIERCING,
+	POISON,
+	PSYCHIC,
+	RADIANT,
+	SLASHING,
+	THUNDER
+}
+
+enum ActionTypes{
+	ATTACK,
+	HEAL
+}
+
+class Actions:
+	var actions = [[],[]]
+	func get_attacks(): return actions[ActionTypes.ATTACK]
+	func get_heals(): return actions[ActionTypes.HEAL]
+	func pass_action():
+		pass
+
+class Attack:
+	const action_type = ActionTypes.ATTACK
+	var name: String
+	var action_index: int
+	var damage: float
+	var damage_type: DamageTypes
+	var stamina_cost: int
+
+	func _init(name:String, damage:float, damage_type:DamageTypes, stamina_cost:int):
+		self.name = name
+		self.damage = damage
+		self.damage_type = damage_type
+		self.stamina_cost = stamina_cost
+
+class Heal:
+	const action_type = ActionTypes.HEAL
+	var name: String
+	var action_index: int
+	var heal: float
+	var is_over_heal: bool
+	var stamina_cost: int
+	func _init(name:String, Heal: float, is_over_heal: bool, stamina_cost:int):
+		self.name = name
+		self.heal = heal
+		self.is_over_heal = is_over_heal
+		self.stamina_cost = stamina_cost
