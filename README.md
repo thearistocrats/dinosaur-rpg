@@ -8,7 +8,7 @@ scenes are wip scenes
 scripts are scripts used in multiple places
 
 currently the workflow looks as such:
-  The dinosaur script is used to store information about the dinosaur itself, including actions, health, stamina, armor, and the dinosaurs identity
-  The dinosaur script is used in a dinosaur scene to make the dinosaur itself
-  the dinosaurs are then used in the combat handler to set up an example encounter
+  The dinosaur script is used to store information about the dinosaur itself, including actions, health, stamina, armor, and the dinosaurs identity\n
+  The dinosaur script is used in a dinosaur scene to make the dinosaur itself\n
+  the dinosaurs are then used in the combat handler to set up an example encounter\n
 currently only one dinosaur is created, the base dinosaur
