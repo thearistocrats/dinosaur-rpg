@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cc7p3g86ltrso"]
+
+[ext_resource type="Script" path="res://gui/title screen/title_screen.gd" id="1_ec8tn"]
+[ext_resource type="FontFile" uid="uid://kntrq14ul6j" path="res://assets/fonts/Xolonium-Regular.ttf" id="2_llewc"]
+
+[node name="Title Screen" type="Node2D"]
+script = ExtResource("1_ec8tn")
+
+[node name="Buttons" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("2_llewc")
+theme_override_font_sizes/font_size = 64
+text = "BUTTONS"
+
+[node name="Load" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("2_llewc")
+theme_override_font_sizes/font_size = 64
+text = "LOAD"
+
+[connection signal="pressed" from="Load" to="." method="_on_load_pressed"]

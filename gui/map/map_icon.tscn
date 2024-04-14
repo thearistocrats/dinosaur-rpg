@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://dpnanjbvdk28v"]
+
+[ext_resource type="Texture2D" uid="uid://cda2qepy2lkh0" path="res://gui/map/icons/hills.png" id="1_ihpap"]
+[ext_resource type="Texture2D" uid="uid://bs0cfysjo57gr" path="res://gui/map/icons/hills blur.png" id="2_ohvu3"]
+[ext_resource type="Texture2D" uid="uid://baafk8m0q562j" path="res://gui/map/icons/purple.png" id="3_hins4"]
+[ext_resource type="Texture2D" uid="uid://c874jrouiq8sh" path="res://gui/map/icons/purple blur.png" id="4_fokvg"]
+[ext_resource type="Texture2D" uid="uid://jutncltyyuq7" path="res://gui/map/icons/volcano.png" id="5_qcbh7"]
+[ext_resource type="Texture2D" uid="uid://qxkll56bpofb" path="res://gui/map/icons/volcano blur.png" id="6_wvtyy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ctub"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x8l1u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ihpap")
+}],
+"loop": true,
+"name": &"hill",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ohvu3")
+}],
+"loop": true,
+"name": &"hill blur",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_hins4")
+}],
+"loop": true,
+"name": &"purple",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_fokvg")
+}],
+"loop": true,
+"name": &"purple blur",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_qcbh7")
+}],
+"loop": true,
+"name": &"volcano",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_wvtyy")
+}],
+"loop": true,
+"name": &"volcano blur",
+"speed": 5.0
+}]
+
+[node name="map icon" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7ctub")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_x8l1u")
+animation = &"hill"

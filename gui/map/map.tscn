@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://dlqe1d3vcaqw1"]
+
+[ext_resource type="Script" path="res://gui/map/map.gd" id="1_7sfou"]
+[ext_resource type="PackedScene" uid="uid://lc50nskkss4b" path="res://objects/combat handler/combat_handler.tscn" id="2_0oty3"]
+[ext_resource type="PackedScene" uid="uid://dc63qcheehs6f" path="res://objects/dinosaurs/base dinosuar/dinosaur.tscn" id="2_q20fc"]
+[ext_resource type="PackedScene" uid="uid://bxtql1ixoyivi" path="res://gui/corner/corners.tscn" id="9_b8guw"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_7sfou")
+base_dino_scene = ExtResource("2_q20fc")
+trexwithgun_scene = ExtResource("2_q20fc")
+
+[node name="Combat Screen" parent="." instance=ExtResource("2_0oty3")]
+metadata/_edit_lock_ = true
+
+[node name="Corner box" parent="." instance=ExtResource("9_b8guw")]
+metadata/_edit_lock_ = true

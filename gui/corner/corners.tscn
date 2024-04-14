@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxtql1ixoyivi"]
+
+[ext_resource type="Script" path="res://gui/corner/corners.gd" id="1_m8dl8"]
+[ext_resource type="Texture2D" uid="uid://dm353wn407if3" path="res://gui/corner/assets/corner0.png" id="2_r7t2b"]
+[ext_resource type="Texture2D" uid="uid://bab1r74n2foso" path="res://gui/corner/assets/corner1.png" id="3_djwcn"]
+[ext_resource type="Texture2D" uid="uid://b53c5ues3guph" path="res://gui/corner/assets/corner2.png" id="4_2oyc5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_myc42"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2oyc5")
+}],
+"loop": true,
+"name": &"GREEN",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_djwcn")
+}],
+"loop": true,
+"name": &"RED",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_r7t2b")
+}],
+"loop": true,
+"name": &"YELLOW",
+"speed": 5.0
+}]
+
+[node name="Corner box" type="Node2D"]
+script = ExtResource("1_m8dl8")
+
+[node name="Top Left" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_myc42")
+animation = &"YELLOW"
+
+[node name="Top Right" type="AnimatedSprite2D" parent="."]
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_myc42")
+animation = &"YELLOW"
+
+[node name="Bottom Right" type="AnimatedSprite2D" parent="."]
+rotation = 3.14159
+sprite_frames = SubResource("SpriteFrames_myc42")
+animation = &"YELLOW"
+
+[node name="Bottom Left" type="AnimatedSprite2D" parent="."]
+rotation = 4.71239
+sprite_frames = SubResource("SpriteFrames_myc42")
+animation = &"YELLOW"
