@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://lc50nskkss4b"]
+
+[ext_resource type="Script" path="res://objects/combat handler/combat_handler.gd" id="1_hlfme"]
+[ext_resource type="PackedScene" uid="uid://dmd2n8o1ot7ko" path="res://gui/action card/action_card.tscn" id="3_2ch2s"]
+[ext_resource type="FontFile" uid="uid://kntrq14ul6j" path="res://assets/fonts/Xolonium-Regular.ttf" id="4_5scc7"]
+[ext_resource type="PackedScene" uid="uid://cuaw3ddtw11f1" path="res://gui/target information panel/target_information_panel.tscn" id="4_6vu1v"]
+[ext_resource type="PackedScene" uid="uid://bxtql1ixoyivi" path="res://gui/corner/corners.tscn" id="6_afqpo"]
+
+[node name="Combat Screen" type="Node2D"]
+script = ExtResource("1_hlfme")
+action_card_scene = ExtResource("3_2ch2s")
+information_panel_scene = ExtResource("4_6vu1v")
+
+[node name="Attacking dino" parent="." instance=ExtResource("6_afqpo")]
+visible = false
+
+[node name="Target dino" parent="." instance=ExtResource("6_afqpo")]
+visible = false
+
+[node name="Selected Action" parent="." instance=ExtResource("6_afqpo")]
+visible = false
+
+[node name="End Turn Button" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -297.0
+offset_top = 5.0
+offset_right = -30.0
+offset_bottom = 71.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("4_5scc7")
+theme_override_font_sizes/font_size = 48
+text = "Swap turn"
+
+[node name="Inventory" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -287.0
+offset_top = 100.0
+offset_right = -38.0
+offset_bottom = 166.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("4_5scc7")
+theme_override_font_sizes/font_size = 48
+text = "Inventory"
+
+[node name="Source icon" type="Sprite2D" parent="."]
+
+[node name="Target icon" type="Sprite2D" parent="."]
+
+[node name="Current Turn" type="Label" parent="."]
+offset_left = -253.0
+offset_top = 205.0
+offset_right = -42.0
+offset_bottom = 247.0
+theme_override_fonts/font = ExtResource("4_5scc7")
+theme_override_font_sizes/font_size = 32
+text = "Player's turn"
+
+[connection signal="pressed" from="End Turn Button" to="." method="swap_turn"]
+[connection signal="pressed" from="Inventory" to="." method="_on_inventory_pressed"]
